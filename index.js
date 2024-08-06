@@ -45,10 +45,38 @@ app.post("/login", (req, res) => {
     }
 });
 
-// 4. Shorts-feed for User
+// 3. Code for Adding Shorts 
+
+app.post("/shorts/create", (req, res) => {
+    var category = req.body.category;
+    var title = req.body.title;
+    var author = req.body.author;
+    var content = req.body.content;
+    var actual_content_link = req.body.actual_content_link;
+    var image = req.body.image;
+    var upvote = req.body.upvote;
+    var downvote = req.body .downvote;
+    var newShort = {
+        category : category,
+        title : title,
+        author : author,
+        publish_date : new Date(),
+        content : content,
+        actual_content_link : actual_content_link,
+        image : image,
+        votes : {
+            upvote : upvote,
+            downvote : downvote,
+        }
+    }
+    shortsDetails.push(newShort);
+    res.json(newShort);
+});
+
+// 4. Code for Shorts-feed for User
 
 app.get("/shorts/feed", (req, res) => {
-    
+    res.json(shortsDetails);
 })
 
 app.listen(port, () => {
