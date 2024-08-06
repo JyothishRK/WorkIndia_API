@@ -92,18 +92,25 @@ app.get("/shorts/feed", (req, res) => {
 // 5. Code for user feed based on filters.
 
 app.get("/shorts/filter", (req, res) => {
-    var filter = req.query;
-    console.log(filter.title);
-    console.log(filter.author);
-    const findIndex = shortsDetails.findIndex( (shorts) => (shorts.title == filter.title && shorts.author == filter.author));
-    if(findIndex > -1) {
-        res.status(200).json(shortsDetails[findIndex]);
+    var filter = req.query; 
+    const userIndex = loginDetails.findIndex( (user) => user.access_token == filter.token);
+    if(userIndex > -1){
+        const findIndex = shortsDetails.findIndex( (shorts) => (shorts.title == filter.title && shorts.author == filter.author));
+        if(findIndex > -1) {
+            res.status(200).json(shortsDetails[findIndex]);
+        }
+        else{
+            res.status(404).json({
+                "error" : "The requested short is not found",
+                status_code : 404
+            });
+        }
     }
     else{
-        res.status(404).json({
-            "error" : "The requested short is not found",
-            status_code : 404
-        });
+        res.status(401).json({
+            "error" : "The user access-key is not valid !!",
+            status_code : 401
+        })
     }
 });
 
